@@ -1,21 +1,17 @@
-import * as BABYLON from "babylonjs"
-import "./style.css"
+import { Scene, Engine, FreeCamera, HemisphericLight, SceneLoader, Vector3 } from '@babylonjs/core';
+import '@babylonjs/loaders/glTF';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
-const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+const engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
 const createScene = function () {
-  const scene = new BABYLON.Scene(engine);
-  const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
-  const gizmo = new BABYLON.CameraGizmo(utilLayer);
-  const camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
-  gizmo.camera = camera;
-  camera.setTarget(BABYLON.Vector3.Zero());
-  camera.attachControl(canvas, false);
-  new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-  const sphere = BABYLON.MeshBuilder.CreateSphere('sphere1', { segments: 16, diameter: 2, sideOrientation: BABYLON.Mesh.FRONTSIDE }, scene);
-  sphere.position.y = 1;
-  BABYLON.MeshBuilder.CreateGround("ground1", { width: 6, height: 6, subdivisions: 1, updatable: false }, scene);
+  const scene = new Scene(engine);
+  const camera = new FreeCamera("camera", new Vector3(0, 5, -10));
+  camera.setTarget(Vector3.Zero());
+  camera.attachControl(canvas, true);
+  const lights = new HemisphericLight("light", new Vector3(0, 1, 0));
+  lights.intensity = 0.7
+  SceneLoader.Append("/", "m1911.glb", scene);
   return scene;
 }
 
